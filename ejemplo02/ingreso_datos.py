@@ -15,16 +15,23 @@ engine = create_engine(cadena_base_datos)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
+# lectura de los dos archivos
 dataclub = open('data/datos_clubs.txt','r')
 dataJugadores = open('data/datos_jugadores.txt', 'r')
+# ciclo para agregar los clubes
 for a in dataclub:
-    fila = a.split(';')
+    #Separacion de los atributos de cada fila
+    fila = a.rstrip().split(';')
+    # Agregar los datos
     c = Club(nombre=fila[0],deporte=fila[1], fundacion=fila[2])
     session.add(c)
+# ciclo para agregar los jugadores
 for b in dataJugadores:
-    fila = b.split(';')
+    #Separacion de los atributos de cada fila
+    fila = b.rstrip().split(';')
+    # almacenar el club cuando se el jugador pertenezca a este
     aux = session.query(Club).filter_by(nombre = fila[0]).first()
+    #Agregar datos
     j = Jugador(nombre=fila[3], dorsal=fila[2], posicion=fila[1],club=aux)
     session.add(j)
 
